@@ -1,6 +1,8 @@
+import 'dart:isolate';
+
 bool _running = true;
 
-void startLoop() {
+void mainLoop(SendPort sendPort) async {
   final double _fps = 50;
   final double _second = 1000;
   final double _updateTime = _second / _fps;
@@ -9,9 +11,10 @@ void startLoop() {
   _loopWatch.start();
 
   while (_running) {
-    if (_loopWatch.elapsedMilliseconds > _updateTime) {
-      print("update");
+    if (_loopWatch.elapsedMilliseconds >= _updateTime) {
+      //print("update");
       _loopWatch.reset();
+      sendPort.send(true);
     }
   }
 }
